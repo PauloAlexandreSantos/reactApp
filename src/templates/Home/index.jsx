@@ -2,14 +2,18 @@
 import './styles.css';
 import { Component } from 'react';
 import { loadPosts } from '../../utils/load.posts';
-import { SectionPosts } from '../../components/SectionPosts';
+import { Button } from '../../components/Button';
+import { Posts } from '../../components/Posts';
 
 
 export class Home extends Component {
 
   state = {
     counter: 0,
-    posts: []
+    posts: [],
+    allPosts: [],
+    page: 0,
+    postsPerPage: 2
   };
 
   timeoutUpdate = null;
@@ -22,17 +26,45 @@ export class Home extends Component {
 
   loadPosts = async () => {
 
+    const { page, postsPerPage } = this.state;
     const result = await loadPosts();
-    this.setState({ posts: result });
+    this.setState({
+      posts: result.slice(page, postsPerPage),
+      allPosts: result,
+
+    });
+
   }
 
+  loadMorePosts = () => {
+    const {
+      page,
+      postsPerPage,
+      allPosts,
+      posts
+    } = this.state;
+    const nextPage = page + postsPerPage;
+    const nextPosts = allPosts.slice(nextPage, nextPage +postsPerPage);
+    posts.push(...nextPosts);
+
+    this.setState({posts, page: nextPage});
+  }
   render() {
 
     const { posts } = this.state;
     return (
 
-      <SectionPosts posts={posts} />
-
+      <section className="container">
+        <Posts posts={posts} />
+        <Button
+          text="Load More Posts"
+          onclick={this.loadMorePosts}
+        />
+      </section>
+      /*    <SectionPosts posts={posts} >
+          
+         </SectionPosts>
+    */
     );
   }
 

@@ -1,3 +1,4 @@
+/* 
 import { Posts } from "../Posts";
 
 export const SectionPosts = ({posts}) => (
@@ -5,4 +6,4 @@ export const SectionPosts = ({posts}) => (
         <Posts posts={posts} />
     </section>
 );
-
+ */
